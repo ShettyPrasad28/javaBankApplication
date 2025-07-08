@@ -61,7 +61,7 @@ public class ManagerServices {
                 return nextCustomerId;
             }
         }catch (SQLException e){
-            System.out.println(e);
+            System.out.println(e.getMessage());
             return -1;
         }
     }
@@ -91,6 +91,52 @@ public class ManagerServices {
             System.out.println("ERROR in account creation \n"+e);
         }
 
+    }
+
+    //update customer
+    public boolean updateCustomer(int cid,String field,String newVal){
+        try(Connection conn=DbConnection.getConnection()){
+            //checking if phoneNumber already exists
+            if(field.contains("PhoneNumber")){
+                long phone;
+                try{
+                    phone=Long.parseLong(newVal);
+                }catch(NumberFormatException e){
+                    System.out.println("Invalid phone number format");
+                    return false;
+                }
+
+                String checkphonequery="SELECT customer_id FROM customer WHERE PhoneNumber=? AND customer_id!=?";
+                PreparedStatement ps=conn.prepareStatement(checkphonequery);
+                ps.setLong(1,phone);
+                ps.setInt(2,cid);
+                ResultSet rs= ps.executeQuery();
+
+                if(rs.next()){
+                    System.out.println("Phone number already in use by another customer");
+                    return false;
+                }
+            }
+            String query="UPDATE customer SET "+field+" =? WHERE customer_id=?";
+            PreparedStatement ps=conn.prepareStatement(query);
+            if(field.contains("PhoneNumber")){
+                ps.setLong(1,Long.parseLong(newVal));
+            }else{
+                ps.setString(1,newVal);
+            }
+            ps.setInt(2,cid);
+            int row=ps.executeUpdate();
+            if(row>0){
+                return true;
+            }else{
+                System.out.println("Customer not found! update failed");
+                return false;
+            }
+
+        }catch (SQLException e){
+            System.out.println("Database error"+e.getMessage());
+            return false;
+        }
     }
 
 

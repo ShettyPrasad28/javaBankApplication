@@ -133,6 +133,36 @@ public class Main {
                                         System.out.println("Enter the customer id");
                                         int cust_id=sc.nextInt();
                                         sc.nextLine();
+                                        String field=null;
+                                        String newVal=null;
+                                        System.out.println("Enter the which field to be updated:\n1.Email\n2.Phone number");
+                                        int sel=sc.nextInt();
+                                        sc.nextLine();
+                                        switch (sel){
+                                            case 1:field="Email";
+                                                System.out.println("Enter new Email");
+                                                newVal=sc.nextLine();
+                                                if(ms.updateCustomer(cust_id,field,newVal)){
+                                                    System.out.println("Email of "+cust_id+" updated successfully");
+                                                }else{
+                                                    System.out.println("Error update failed");
+                                                }
+                                                break;
+                                            case 2:field="PhoneNumber";
+                                                  System.out.println("Enter new number");
+                                                  newVal=sc.nextLine();
+                                                  if(ms.updateCustomer(cust_id,field,newVal)){
+                                                      System.out.println("Phone number of "+cust_id+" updated successfully");
+                                                  }else{
+                                                      System.out.println("Error has occurred");
+                                                  }
+                                                  break;
+                                            default:System.out.println("Invalid input");
+                                                    break;
+                                        }
+                                        break;
+                                case 3:
+
                             }
 
                         }while(running);
