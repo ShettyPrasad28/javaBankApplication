@@ -131,6 +131,8 @@ public class Main {
                                         break;
                                 case 2:System.out.println("Welcome to Account management");
                                         System.out.println("Enter the customer id");
+                                        int cust_id=sc.nextInt();
+                                        sc.nextLine();
                             }
 
                         }while(running);
