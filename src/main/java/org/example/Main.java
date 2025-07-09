@@ -1,10 +1,13 @@
 package org.example;
 
 import org.example.admin.AdminServices;
+import org.example.customer.CustomerService;
 import org.example.manager.ManagerServices;
 
 import java.sql.SQLException;
 import java.util.Scanner;
+
+import static java.lang.System.exit;
 
 
 public class Main {
@@ -13,6 +16,7 @@ public class Main {
        Scanner sc=new Scanner(System.in);
        AdminServices ad=new AdminServices();
         ManagerServices ms=new ManagerServices();
+        CustomerService cs=new CustomerService();
 
 
        System.out.println("Welcome to Bank,Choose user type:");
@@ -207,6 +211,30 @@ public class Main {
                         System.out.println("login failed username does not exists");
                     }
                     break;
+           case 3:System.out.println("Welcome to Banking");
+                    System.out.println("Enter username:");
+                    String uname= sc.nextLine();
+                    System.out.println("Enter passwaord:");
+                    String cpwd=sc.nextLine();
+                    if(cs.login(uname,cpwd)){
+                        System.out.println("logged in successfully");
+                        System.out.println("Choose\n1. View Account\n2. logout");
+                        int ch=sc.nextInt();
+                        sc.nextLine();
+                        switch (ch){
+                            case 1:cs.viewAccount(uname);
+                                    break;
+                            case 2:System.out.println("logged out successfully");
+                                    exit(0);
+                            default:System.out.println("Invalid choice");
+                        }
+                    }else{
+                        System.out.println("Login failed");
+                    }
+                    break;
+           default:
+               System.out.println("Invalid Selection");
+               break;
 
 
 

@@ -2,7 +2,6 @@ package org.example.manager;
 
 import org.example.db.DbConnection;
 
-import java.awt.geom.Arc2D;
 import java.sql.*;
 import java.time.format.DateTimeFormatter;
 
@@ -224,7 +223,7 @@ public class ManagerServices {
             ps.setInt(2, accid);
             ResultSet rs=ps.executeQuery();
             System.out.println(type.toUpperCase()+" Transaction Report");
-            System.out.printf("%-5s %-10s %-12s %-10s %-20s%n", "ID", "Acc ID", "Type", "Amount", "Date/Time");
+            System.out.printf("%-5s %-10s %-12s %-10s %-20s%n", "trn_ID", "Acc ID", "Type", "Amount", "Date/Time");
 
             boolean found=false;
             while(rs.next()){
