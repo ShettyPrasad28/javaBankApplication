@@ -179,7 +179,25 @@ public class Main {
                                             System.out.println("Invalid transaction type");
                                         }
                                         break;
-
+                                case 4:System.out.println("Generate report:\n1. Daily Report \n2. Monthly report");
+                                    System.out.println("Enter your choice");
+                                    int ch=sc.nextInt();
+                                    System.out.print("Enter Account ID: ");
+                                    int accId = sc.nextInt();
+                                    sc.nextLine();
+                                    String repo_type=(ch==1)?("Daily"):(ch==2)?("Monthly"):null;
+                                    if(repo_type==null){
+                                        System.out.println("Invalid choice");
+                                        break;
+                                    }
+                                    ms.generateReport(repo_type,muser,accId);
+                                    break;
+                                case 5:
+                                    System.out.println("logged out successfully");
+                                    running=false;
+                                    break;
+                                default:
+                                    System.out.println("Invalid choice");
 
                             }
 
