@@ -2,6 +2,7 @@ package org.example.manager;
 
 import org.example.db.DbConnection;
 
+import java.awt.geom.Arc2D;
 import java.sql.*;
 
 public class ManagerServices {
@@ -135,6 +136,64 @@ public class ManagerServices {
 
         }catch (SQLException e){
             System.out.println("Database error"+e.getMessage());
+            return false;
+        }
+    }
+
+    //transsaction performs deposite or withdraw
+    public boolean transaction(int account_id,String type,double amount){
+        try(Connection conn= DbConnection.getConnection()){
+
+            //fetch balance using account id
+            String balquery="SELECT initial_bal FROM account WHERE account_id=?";
+            PreparedStatement ps=conn.prepareStatement(balquery);
+            ps.setInt(1,account_id);
+            ResultSet rs=ps.executeQuery();
+
+            if(!rs.next()){
+                System.out.println("Account not found");
+                return false;
+            }
+
+            double currentBalance=rs.getDouble("initial_bal");
+            double newBalance=currentBalance;
+
+            //Processing the transaction
+            if(type.equalsIgnoreCase("deposit")){
+                newBalance+=amount;
+            } else if (type.equalsIgnoreCase("withdraw")) {
+                if(currentBalance<amount){
+                    System.out.println("Insufficient Balance available balance is ₹"+currentBalance);
+                    return false;
+                }
+                newBalance-=amount;
+            }else{
+                return false;
+            }
+
+            //updating the balance in account table
+            String update="UPDATE account SET initial_bal=? WHERE account_id=?";
+            PreparedStatement upstmt=conn.prepareStatement(update);
+            upstmt.setDouble(1,newBalance);
+            upstmt.setInt(2,account_id);
+            int row=upstmt.executeUpdate();
+            //insert transaction details into transaction table
+            if(row>0){
+                String insert_trans="INSERT INTO transaction(account_id,transaction_type,amount,transaction_date)VALUES(?,?,?,NOW())";
+                PreparedStatement upps=conn.prepareStatement(insert_trans);
+                upps.setInt(1,account_id);
+                upps.setString(2,type.toUpperCase());
+                upps.setDouble(3,amount);
+                upps.executeUpdate();
+                System.out.println("Transaction successfull! balance : ₹"+newBalance);
+                return true;
+            }else{
+                System.out.println("failed to update balance");
+                return false;
+            }
+
+        }catch (SQLException e){
+            System.out.println("Database Error"+e.getMessage());
             return false;
         }
     }

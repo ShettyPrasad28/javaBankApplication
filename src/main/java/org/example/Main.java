@@ -161,7 +161,25 @@ public class Main {
                                                     break;
                                         }
                                         break;
-                                case 3:
+                                case 3:System.out.println("Make Transaction");
+                                        System.out.println("Enter account Id:");
+                                        int acc_id=sc.nextInt();
+                                        System.out.println("Choose transaction type:\n1. Deposit\n2. Withdraw");
+                                        int trnc_type=sc.nextInt();
+                                        System.out.println("Enter the amount:");
+                                        double amount=sc.nextDouble();
+                                        sc.nextLine();
+                                        String type=(trnc_type==1)?("Deposit"):(trnc_type==2)?("Withdraw"):null;
+                                        if(type!=null){
+                                            boolean res=ms.transaction(acc_id,type,amount);
+                                            if(!res){
+                                                System.out.println("Transaction failed");
+                                            }
+                                        }else{
+                                            System.out.println("Invalid transaction type");
+                                        }
+                                        break;
+
 
                             }
 
